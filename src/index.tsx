@@ -1,3 +1,4 @@
+import React from 'react';
 import { Button, Frog } from 'frog';
 
 export const app = new Frog({ title: 'Top Farcaster Trends' });
@@ -9,30 +10,25 @@ app.frame('/', async (c) => {
     const data = await response.json();
     const topics = data.topics;
 
-    // Return the frame's content
+    // Generate the appropriate image URL based on the topics
+    const imageUrl = topics.length > 0 ? `/api/generateImage?topics=${encodeURIComponent(JSON.stringify(topics))}` : '/api/generateImage?placeholder=true';
+
+    // Return the frame's content with the generated image URL
     return c.res({
-      image: (
-        <div style={{ color: 'white', display: 'flex', flexDirection: 'column', fontSize: 40 }}>
-          <h1>Top Farcaster Trends</h1>
-          <ol>
-            {topics.map((topic, index) => (
-              <li key={index}>{topic}</li>
-            ))}
-          </ol>
-        </div>
-      ),
+      image: imageUrl,
       intents: [
         <Button value="refresh">Refresh Trends</Button>
       ]
     });
   } catch (error) {
     console.error('Error fetching trends:', error);
+
+    // Return an error image in case fetching trends fails
     return c.res({
-      image: (
-        <div style={{ color: 'red', fontSize: 20 }}>
-          Error fetching trends. Please try again later.
-        </div>
-      )
+      image: '/api/generateImage?placeholder=true',
+      intents: [
+        <Button value="retry">Retry</Button>
+      ]
     });
   }
 });
