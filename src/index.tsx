@@ -1,4 +1,3 @@
-import React from 'react';
 import { Frog, Button } from 'frog';
 
 export const app = new Frog({ title: 'Top Farcaster Trends' });
@@ -14,7 +13,7 @@ app.frame('/', async (c) => {
       : '/api/generateImage?placeholder=true';
 
     return c.res({
-      image: (
+      image: Frog.image(
         <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
           {topics.length > 0 ? (
             <ol>
@@ -28,15 +27,15 @@ app.frame('/', async (c) => {
         </div>
       ),
       intents: [
-        <Button value="refresh">Refresh Trends</Button>
+        Button({ value: 'refresh' }, 'Refresh Trends'),
       ]
     });
   } catch (error) {
     console.error('Error fetching trends:', error);
     return c.res({
-      image: '/api/generateImage?placeholder=true',
+      image: Frog.image('/api/generateImage?placeholder=true'),
       intents: [
-        <Button value="retry">Retry</Button>
+        Button({ value: 'retry' }, 'Retry'),
       ]
     });
   }
