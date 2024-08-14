@@ -1,3 +1,4 @@
+import React from 'react';
 import { Frog, Button } from 'frog';
 
 export const app = new Frog({ title: 'Top Farcaster Trends' });
@@ -6,9 +7,11 @@ app.frame('/', async (c) => {
   try {
     const response = await fetch('/api/getTrends');
     const data = await response.json();
-    const topics = data.topics;
+    const topics: string[] = data.topics;
 
-    const imageUrl = topics.length > 0 ? `/api/generateImage?topics=${encodeURIComponent(JSON.stringify(topics))}` : '/api/generateImage?placeholder=true`;
+    const imageUrl = topics.length > 0 
+      ? `/api/generateImage?topics=${encodeURIComponent(JSON.stringify(topics))}` 
+      : '/api/generateImage?placeholder=true';
 
     return c.res({
       image: (
@@ -25,7 +28,7 @@ app.frame('/', async (c) => {
         </div>
       ),
       intents: [
-        <Button value="refresh">Refresh Trends</Button>
+        new Button({ value: 'refresh', label: 'Refresh Trends' })
       ]
     });
   } catch (error) {
@@ -33,7 +36,7 @@ app.frame('/', async (c) => {
     return c.res({
       image: '/api/generateImage?placeholder=true',
       intents: [
-        <Button value="retry">Retry</Button>
+        new Button({ value: 'retry', label: 'Retry' })
       ]
     });
   }
