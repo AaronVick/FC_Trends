@@ -1,7 +1,10 @@
 import axios from 'axios';
 import { pipeline } from '@huggingface/transformers';
 
-const summarizer = pipeline('summarization', 'facebook/bart-large-cnn');
+// Create a summarizer with your Hugging Face API key
+const summarizer = pipeline('summarization', 'facebook/bart-large-cnn', {
+  apiKey: process.env.HUGGING_FACE_API_KEY
+});
 
 export default async function handler(req, res) {
   try {
