@@ -28,7 +28,7 @@ app.frame('/', async (c) => {
         </div>
       ),
       intents: [
-        new Button({ value: 'refresh', label: 'Refresh Trends' })
+        <Button value="refresh">Refresh Trends</Button>
       ]
     });
   } catch (error) {
@@ -36,7 +36,7 @@ app.frame('/', async (c) => {
     return c.res({
       image: '/api/generateImage?placeholder=true',
       intents: [
-        new Button({ value: 'retry', label: 'Retry' })
+        <Button value="retry">Retry</Button>
       ]
     });
   }
