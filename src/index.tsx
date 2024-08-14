@@ -1,5 +1,4 @@
-import React from 'react';
-import { Button, Frog } from 'frog';
+import { Frog, FrameIntent } from 'frog';
 
 export const app = new Frog({ title: 'Top Farcaster Trends' });
 
@@ -13,12 +12,15 @@ app.frame('/', async (c) => {
     // Generate the appropriate image URL based on the topics
     const imageUrl = topics.length > 0 ? `/api/generateImage?topics=${encodeURIComponent(JSON.stringify(topics))}` : '/api/generateImage?placeholder=true';
 
-    // Return the frame's content with the generated image URL
+    // Define the intents as an array of FrameIntent objects
+    const intents: FrameIntent[] = [
+      { type: 'Button', value: 'refresh', label: 'Refresh Trends' }
+    ];
+
+    // Return the frame's content with the generated image URL and intents
     return c.res({
       image: imageUrl,
-      intents: [
-        <Button value="refresh">Refresh Trends</Button>
-      ]
+      intents: intents
     });
   } catch (error) {
     console.error('Error fetching trends:', error);
@@ -27,7 +29,7 @@ app.frame('/', async (c) => {
     return c.res({
       image: '/api/generateImage?placeholder=true',
       intents: [
-        <Button value="retry">Retry</Button>
+        { type: 'Button', value: 'retry', label: 'Retry' }
       ]
     });
   }
