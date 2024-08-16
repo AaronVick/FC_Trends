@@ -1,73 +1,38 @@
-import { Frog, Button } from 'frog'
-import { handle } from 'frog/vercel'
+import React from 'react';
+import { Frog, Button } from 'frog';
+import { moxieData } from '@airstack/frog';
 
-export const app = new Frog({
-  basePath: '/api',
-  initialState: {
-    topics: [] as string[]
-  }
-})
+const moxieMiddleware = moxieData({
+  apiKey: process.env.AIRSTACK_API_KEY, // Ensure this is set in your environment
+  features: {
+    moxieEarnings: true,
+    trendingCasts: true,
+    // Add more features as needed
+  },
+  env: 'production', // Adjust as needed
+});
 
-app.frame('/', (c) => {
-  const { topics } = c.varsWithTypes<{ topics: string[] }>()
-  
-  return c.res({
-    image: (
-      <div style={{ color: 'white', display: 'flex', fontSize: 60, flexDirection: 'column' }}>
-        <h1>Top Farcaster Trends</h1>
-        {topics.length > 0 ? (
-          <ol>
-            {topics.map((topic, index) => (
-              <li key={index}>{topic}</li>
-            ))}
-          </ol>
-        ) : (
-          'No trending topics available'
-        )}
-      </div>
-    ),
-    intents: [
-      <Button action="fetch-trends">Fetch Trends</Button>
-    ]
-  })
-})
+export const app = new Frog({ title: 'Top Farcaster Trends' });
 
-app.frame('fetch-trends', async (c) => {
+app.frame('/', moxieMiddleware, async (c) => {
   try {
-    const response = await fetch('https://your-api-endpoint.com/trends')
-    const data = await response.json()
-    const topics: string[] = data.topics
+    const moxieEarnings = c.var.moxieEarnings || [];
+    const trendingCasts = c.var.trendingCasts || [];
 
+    // Generate content based on Moxie data
     return c.res({
-      image: (
-        <div style={{ color: 'white', display: 'flex', fontSize: 60, flexDirection: 'column' }}>
-          <h1>Top Farcaster Trends</h1>
-          <ol>
-            {topics.map((topic, index) => (
-              <li key={index}>{topic}</li>
-            ))}
-          </ol>
-        </div>
-      ),
+      image: '/api/generateImage?topics=' + encodeURIComponent(JSON.stringify(trendingCasts)),
       intents: [
-        <Button action="/">Back</Button>,
-        <Button action="fetch-trends">Refresh</Button>
+        <Button value="refresh">Refresh Trends</Button>
       ]
-    })
+    });
   } catch (error) {
-    console.error('Error fetching trends:', error)
+    console.error('Error fetching Moxie data:', error);
     return c.res({
-      image: (
-        <div style={{ color: 'red', display: 'flex', fontSize: 60 }}>
-          Error loading trends. Please try again.
-        </div>
-      ),
+      image: '/api/generateImage?placeholder=true',
       intents: [
-        <Button action="fetch-trends">Retry</Button>
+        <Button value="retry">Retry</Button>
       ]
-    })
+    });
   }
-})
-
-export const GET = handle(app)
-export const POST = handle(app)
+});

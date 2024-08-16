@@ -1,24 +1,19 @@
 {
-  "name": "farcaster-frame",
+  "name": "fc_trends",
   "version": "1.0.0",
-  "private": true,
   "scripts": {
-    "build": "frog vercel-build",
-    "dev": "frog dev",
-    "deploy": "vercel deploy --prod"
+    "build": "next build",
+    "start": "next start",
+    "dev": "next dev"
   },
   "dependencies": {
-    "@huggingface/transformers": "^3.0.0-alpha.5",
-    "frog": "^0.16.1",
-    "hono": "^4.4.4",
-    "node-fetch": "^3.3.2",
+    "@airstack/frog": "^0.16.1",  // Ensure this is added or updated to the latest version
+    "@huggingface/transformers": "^4.9.0",
+    "axios": "^0.21.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "typescript": "^5.0.0",
-    "vercel": "^33.0.0"
+    "typescript": "^5.5.4"
   }
 }
