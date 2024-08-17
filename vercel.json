@@ -2,7 +2,7 @@
   "version": 2,
   "functions": {
     "api/summarizeTrends.js": {
-      "runtime": "vercel-node@20.0.0"
+      "runtime": "nodejs20.x"
     },
     "api/trendingFrame.js": {
       "runtime": "edge"
