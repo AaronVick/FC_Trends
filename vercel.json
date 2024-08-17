@@ -1,11 +1,13 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "next.config.js",
-      "use": "@vercel/next"
+  "functions": {
+    "api/trendingFrame.js": {
+      "runtime": "edge"
+    },
+    "api/generateInitialImage.js": {
+      "runtime": "edge"
     }
-  ],
+  },
   "routes": [
     {
       "src": "/api/trendingFrame",
@@ -20,14 +22,6 @@
       "dest": "/$1"
     }
   ],
-  "functions": {
-    "api/trendingFrame.js": {
-      "runtime": "edge"
-    },
-    "api/generateInitialImage.js": {
-      "runtime": "edge"
-    }
-  },
   "env": {
     "HUGGING_FACE_API_KEY": "@hugging_face_api_key"
   }
