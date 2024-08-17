@@ -16,5 +16,6 @@
     "react": "latest",
     "react-dom": "latest"
   },
-  "author": "Aaron Vick"
+  "author": "Aaron Vick",
+  "license": "MIT"
 }
