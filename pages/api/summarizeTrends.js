@@ -1,22 +1,41 @@
 import axios from 'axios';
-import { GPT4All } from 'gpt4all';
+import natural from 'natural';
 
-const gpt4all = new GPT4All('gpt4all-j', true);
+const TfIdf = natural.TfIdf;
+const tokenizer = new natural.WordTokenizer();
 
-async function analyzeTopics(text) {
-  await gpt4all.init();
-  await gpt4all.open();
+function extractKeyPhrases(text, n = 5) {
+  const tfidf = new TfIdf();
+  
+  // Tokenize and add the document
+  const tokens = tokenizer.tokenize(text.toLowerCase());
+  tfidf.addDocument(tokens);
 
-  const prompt = `Analyze the following text and identify the top 5 trending topics. Present them as a comma-separated list:
+  // Calculate scores for each term
+  const scores = {};
+  tfidf.listTerms(0 /*document index*/).forEach(item => {
+    scores[item.term] = item.tfidf;
+  });
 
-${text}
+  // Extract key phrases (bigrams and trigrams)
+  const phrases = [];
+  for (let i = 0; i < tokens.length - 1; i++) {
+    const bigram = tokens.slice(i, i + 2).join(' ');
+    const trigram = tokens.slice(i, i + 3).join(' ');
+    phrases.push(bigram, trigram);
+  }
 
-Top 5 trending topics:`;
+  // Score phrases
+  const phraseScores = phrases.map(phrase => ({
+    phrase,
+    score: phrase.split(' ').reduce((sum, term) => sum + (scores[term] || 0), 0)
+  }));
 
-  const response = await gpt4all.prompt(prompt);
-  await gpt4all.close();
-
-  return response.trim().split(',').map(topic => topic.trim());
+  // Sort and return top n phrases
+  return phraseScores
+    .sort((a, b) => b.score - a.score)
+    .slice(0, n)
+    .map(item => item.phrase);
 }
 
 export default async function handler(req, res) {
@@ -24,7 +43,7 @@ export default async function handler(req, res) {
     try {
       const pinataResponse = await axios.get('https://api.pinata.cloud/data/trending');
       const topCasts = pinataResponse.data.map(item => item.description).join(' ');
-      const topics = await analyzeTopics(topCasts);
+      const topics = extractKeyPhrases(topCasts);
 
       res.status(200).json({ topics });
     } catch (error) {
