@@ -1,6 +1,13 @@
 {
   "version": 2,
-  "functions": {},
+  "functions": {
+    "api/trendingFrame.js": {
+      "runtime": "edge"
+    },
+    "api/generateInitialImage.js": {
+      "runtime": "edge"
+    }
+  },
   "routes": [
     {
       "src": "/api/trendingFrame",
