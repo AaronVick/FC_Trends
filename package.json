@@ -4,9 +4,9 @@
   "description": "trending topics",
   "main": "index.js",
   "scripts": {
+    "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "dev": "next dev"
+    "start": "next start"
   },
   "dependencies": {
     "@vercel/og": "^0.6.2",
