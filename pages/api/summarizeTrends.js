@@ -41,13 +41,25 @@ function extractKeyPhrases(text, n = 5) {
 export default async function handler(req, res) {
   if (req.method === 'GET') {
     try {
-      const pinataResponse = await axios.get('https://api.pinata.cloud/data/trending');
+      console.log('Attempting to fetch trending data from Pinata...');
+
+      const pinataResponse = await axios.get('https://api.pinata.cloud/data/trending', {
+        headers: {
+          Authorization: `Bearer ${process.env.PINATA_API_KEY}`,
+        },
+      });
+
+      console.log('Data fetched from Pinata:', pinataResponse.data);
+
       const topCasts = pinataResponse.data.map(item => item.description).join(' ');
+      console.log('Combined descriptions:', topCasts);
+
       const topics = extractKeyPhrases(topCasts);
+      console.log('Extracted key phrases:', topics);
 
       res.status(200).json({ topics });
     } catch (error) {
-      console.error(error);
+      console.error('Error during processing:', error.message);
       res.status(500).json({ error: 'Failed to fetch and analyze trends' });
     }
   } else {
