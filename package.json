@@ -9,9 +9,9 @@
     "dev": "next dev"
   },
   "dependencies": {
-    "@huggingface/transformers": "^3.0.0-alpha.6",
     "@vercel/og": "^0.6.2",
     "axios": "^1.7.4",
+    "gpt4all": "^2.2.2",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"

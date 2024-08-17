@@ -4,7 +4,6 @@ const path = require('path');
 const nextConfig = {
   reactStrictMode: true,
 
-  // Ensure your API routes and static files can be accessed properly
   async headers() {
     return [
       {
@@ -19,9 +18,8 @@ const nextConfig = {
     ];
   },
 
-  // Allow images from specific domains
   images: {
-    domains: ['success-omega.vercel.app', 'pinata.cloud'], // Add any domains you might fetch images from
+    domains: ['success-omega.vercel.app', 'pinata.cloud'],
   },
 
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
@@ -30,12 +28,20 @@ const nextConfig = {
         'process.env.NEXT_PUBLIC_BUILD_TIME': JSON.stringify(new Date().toISOString()),
       })
     );
+
+    // Add rule for gpt4all
+    config.module.rules.push({
+      test: /\.wasm$/,
+      type: 'webassembly/async',
+    });
+
+    // Important: return the modified config
     return config;
   },
 
-  // Standalone output for serverless environments
+  // Enable WebAssembly
   experimental: {
-    outputStandalone: true,
+    asyncWebAssembly: true,
   },
 };
 
