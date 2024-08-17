@@ -1,13 +1,11 @@
 {
   "version": 2,
-  "functions": {
-    "api/trendingFrame.js": {
-      "runtime": "edge"
-    },
-    "api/generateInitialImage.js": {
-      "runtime": "edge"
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
     }
-  },
+  ],
   "routes": [
     {
       "src": "/api/trendingFrame",
