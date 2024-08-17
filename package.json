@@ -1,7 +1,7 @@
 {
   "name": "fc_trends",
   "version": "1.0.0",
-  "description": "Farcaster trending topics frames",
+  "description": "Farcaster trending topics",
   "main": "index.js",
   "scripts": {
     "build": "next build",
