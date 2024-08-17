@@ -1,5 +1,3 @@
-const path = require('path');
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -28,20 +26,7 @@ const nextConfig = {
         'process.env.NEXT_PUBLIC_BUILD_TIME': JSON.stringify(new Date().toISOString()),
       })
     );
-
-    // Add rule for gpt4all
-    config.module.rules.push({
-      test: /\.wasm$/,
-      type: 'webassembly/async',
-    });
-
-    // Important: return the modified config
     return config;
-  },
-
-  // Enable WebAssembly
-  experimental: {
-    asyncWebAssembly: true,
   },
 };
 
