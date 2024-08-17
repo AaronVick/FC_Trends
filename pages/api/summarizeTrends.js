@@ -4,6 +4,8 @@ import natural from 'natural';
 const TfIdf = natural.TfIdf;
 const tokenizer = new natural.WordTokenizer();
 
+const FARQUEST_API = 'https://build.far.quest/farcaster/v2';
+
 function extractKeyPhrases(text, n = 5) {
   const tfidf = new TfIdf();
   
@@ -38,29 +40,50 @@ function extractKeyPhrases(text, n = 5) {
     .map(item => item.phrase);
 }
 
+async function getTrendingCasts(limit = 20) {
+  try {
+    const response = await axios.get(`${FARQUEST_API}/feed`, {
+      headers: {
+        'API-KEY': process.env.FARQUEST_API_KEY,  // Use your actual API key stored in Vercel
+        'accept': 'application/json',
+      },
+      params: {
+        limit,
+      },
+      timeout: 10000,
+    });
+
+    if (response.status !== 200) {
+      throw new Error(`Unexpected response status: ${response.status}`);
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error getting trending casts:', error.message);
+    throw error;
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method === 'GET') {
     try {
-      console.log('Attempting to fetch trending data from Pinata...');
+      console.log('Attempting to fetch trending casts from FarQuest API...');
 
-      const pinataResponse = await axios.get('https://api.pinata.cloud/data/trending', {
-        headers: {
-          Authorization: `Bearer ${process.env.PINATA_API_KEY}`,
-        },
-      });
+      const trendingCasts = await getTrendingCasts();
+      console.log('Fetched trending casts:', JSON.stringify(trendingCasts, null, 2));
 
-      console.log('Data fetched from Pinata:', pinataResponse.data);
+      // Extract text from trending casts
+      const castTexts = trendingCasts.map(cast => cast.text).join(' ');
 
-      const topCasts = pinataResponse.data.map(item => item.description).join(' ');
-      console.log('Combined descriptions:', topCasts);
+      console.log('Combined cast texts:', castTexts);
 
-      const topics = extractKeyPhrases(topCasts);
+      const topics = extractKeyPhrases(castTexts);
       console.log('Extracted key phrases:', topics);
 
       res.status(200).json({ topics });
     } catch (error) {
       console.error('Error during processing:', error.message);
-      res.status(500).json({ error: 'Failed to fetch and analyze trends' });
+      res.status(500).json({ error: 'Failed to fetch and analyze trends', details: error.message });
     }
   } else {
     res.setHeader('Allow', ['GET']);
