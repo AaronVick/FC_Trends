@@ -1,7 +1,20 @@
 {
+  "name": "fc_trends",
+  "version": "1.0.0",
+  "description": "A project to generate Farcaster trending topics frames",
+  "main": "index.js",
+  "scripts": {
+    "build": "next build",
+    "start": "next start",
+    "dev": "next dev"
+  },
   "dependencies": {
     "@huggingface/transformers": "^3.0.0-alpha.6",
     "@vercel/og": "^0.6.2",
-    "axios": "^1.7.4"
-  }
+    "axios": "^1.7.4",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "author": "Aaron Vick"
 }
