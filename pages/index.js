@@ -9,7 +9,7 @@ export default function Home({ baseUrl }) {
   return (
     <>
       <Head>
-        <title>Trending Topics on Farcaster</title>
+        <title>Trending Topics</title>
         <meta property="fc:frame" content="vNext" />
         <meta property="fc:frame:image" content={`${baseUrl}/api/generateInitialImage`} />
         <meta property="fc:frame:button:1" content="See Trends" />
