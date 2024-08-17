@@ -8,7 +8,7 @@ export default async function handler(req) {
   try {
     console.log('Generating initial image for Trending Topics');
 
-    const imageResponse = new ImageResponse(
+    return new ImageResponse(
       (
         <div
           style={{
@@ -18,7 +18,7 @@ export default async function handler(req) {
             height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
-            padding: '40px',
+            padding: '20px',
             backgroundColor: '#f9f9f9',
             fontFamily: 'Arial, sans-serif',
           }}
@@ -26,7 +26,7 @@ export default async function handler(req) {
           <div style={{ fontSize: '50px', fontWeight: 'bold', color: '#333' }}>
             Trending Topics on Farcaster
           </div>
-          <div style={{ fontSize: '30px', marginTop: '20px', color: '#777' }}>
+          <div style={{ fontSize: '30px', marginTop: '20px', color: '#777', textAlign: 'center' }}>
             Stay updated with the latest discussions.
           </div>
         </div>
@@ -37,8 +37,6 @@ export default async function handler(req) {
       }
     );
 
-    console.log('Initial image generated successfully');
-    return imageResponse;
   } catch (error) {
     console.error('Error generating initial image:', error);
     return new Response('Error generating initial image', { status: 500 });

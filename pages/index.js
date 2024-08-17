@@ -1,7 +1,8 @@
 import Head from 'next/head';
 
 export async function getServerSideProps() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://vercel.com/aarons-projects-9827ccd9/fc-trends';
+  const baseUrl = 'https://farcaster-trends.vercel.app';
+  console.log('Base URL for initial frame:', baseUrl);
   return { props: { baseUrl } };
 }
 
