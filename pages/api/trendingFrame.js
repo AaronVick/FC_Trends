@@ -1,27 +1,15 @@
 import axios from 'axios';
-import { pipeline } from '@huggingface/transformers';
 import { ImageResponse } from '@vercel/og';
 
-const summarizer = pipeline('summarization', 'facebook/bart-large-cnn', {
-  apiKey: process.env.HUGGING_FACE_API_KEY,
-});
-
 export const config = {
-  runtime: 'experimental-edge',
+  runtime: 'edge',
 };
 
 export default async function handler(req, res) {
   try {
-    // Fetch trending data from Pinata without API keys
-    const pinataResponse = await axios.get('https://api.pinata.cloud/data/trending');
-
-    const topCasts = pinataResponse.data.map(item => item.description).join('. ');
-
-    // Process the list through Hugging Face to extract topics
-    const summaries = await summarizer(topCasts, { max_length: 100, min_length: 5, do_sample: false });
-    const topics = summaries[0].summary_text.split('.').filter(t => t).slice(0, 5);
-
-    const topicsText = topics.join(', ');
+    // Fetch summarized topics from the new serverless function
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/summarizeTrends`);
+    const topics = response.data.topics;
 
     const imageResponse = new ImageResponse(
       (

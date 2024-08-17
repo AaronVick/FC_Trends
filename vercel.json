@@ -1,12 +1,21 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
+  "functions": {
+    "api/summarizeTrends.js": {
+      "runtime": "vercel-node@20.0.0"
+    },
+    "api/trendingFrame.js": {
+      "runtime": "edge"
+    },
+    "api/generateInitialImage.js": {
+      "runtime": "edge"
     }
-  ],
+  },
   "routes": [
+    {
+      "src": "/api/summarizeTrends",
+      "dest": "/api/summarizeTrends.js"
+    },
     {
       "src": "/api/trendingFrame",
       "dest": "/api/trendingFrame.js"
