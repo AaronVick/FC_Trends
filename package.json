@@ -1,7 +1,7 @@
 {
   "name": "fc_trends",
   "version": "1.0.0",
-  "description": "A project to generate Farcaster trending topics frames",
+  "description": "Farcaster trending topics frames",
   "main": "index.js",
   "scripts": {
     "build": "next build",
@@ -15,7 +15,5 @@
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"
-  },
-  "author": "Aaron Vick",
-  "license": "MIT"
+  }
 }
