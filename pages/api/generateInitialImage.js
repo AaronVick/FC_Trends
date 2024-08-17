@@ -1,7 +1,7 @@
 import { ImageResponse } from '@vercel/og';
 
 export const config = {
-  runtime: 'experimental-edge',
+  runtime: 'edge',
 };
 
 export default async function handler(req) {
@@ -31,7 +31,7 @@ export default async function handler(req) {
     ),
     {
       width: 1200,
-      height: 630, // 1.91:1 aspect ratio
+      height: 630,
     }
   );
 }

@@ -1,13 +1,14 @@
 import { ImageResponse } from '@vercel/og';
 
 export const config = {
-  runtime: 'experimental-edge',
+  runtime: 'edge',
 };
 
 export default async function handler(req) {
   const { searchParams } = new URL(req.url);
-  const topics = searchParams.get('topics') || 'Trending Topics';
-  
+  const topicsParam = searchParams.get('topics');
+  const topics = topicsParam ? JSON.parse(decodeURIComponent(topicsParam)) : [];
+
   return new ImageResponse(
     (
       <div
@@ -27,7 +28,7 @@ export default async function handler(req) {
           Trending Topics
         </div>
         <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '30px', color: '#777' }}>
-          {topics.split(',').map((topic, index) => (
+          {topics.map((topic, index) => (
             <div key={index} style={{ margin: '10px 0' }}>
               {topic}
             </div>
