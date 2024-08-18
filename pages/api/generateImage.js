@@ -47,8 +47,8 @@ export default async function handler(req) {
             alt="Profile"
             style={{
               borderRadius: '50%',
-              width: '100px',  // Explicitly define width
-              height: '100px', // Explicitly define height
+              width: '200px',  // Adjusting width for the 1.91:1 aspect ratio
+              height: '105px', // Adjusting height for the 1.91:1 aspect ratio
               marginBottom: 20,
             }}
           />
@@ -66,8 +66,8 @@ export default async function handler(req) {
         </div>
       ),
       {
-        width: 800,
-        height: 600,
+        width: 800,  // 1.91:1 aspect ratio width
+        height: 418, // 1.91:1 aspect ratio height
       }
     );
   } catch (error) {
