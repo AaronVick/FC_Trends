@@ -38,6 +38,9 @@ function performTopicModeling(texts, numberOfTopics = 5, termsPerTopic = 3) {
   // Clean and prepare the texts for LDA
   const cleanedTexts = texts.map(text => cleanText(text));
 
+  // Log cleaned texts for debugging
+  console.log('Cleaned Texts:', cleanedTexts);
+
   // Perform LDA topic modeling on the cleaned text documents
   const topics = lda(cleanedTexts, numberOfTopics, termsPerTopic);
 
@@ -58,7 +61,7 @@ export default async function handler(req, res) {
 
       // Extract and clean text from trending casts
       const castTexts = casts.map(cast => cast.text);
-      console.log('Combined cast texts:', castTexts);
+      console.log('Extracted cast texts:', castTexts);
 
       const topics = performTopicModeling(castTexts, 5, 3);
       console.log('Extracted topics:', topics);
