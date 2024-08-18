@@ -9,16 +9,26 @@ export default async function handler(req) {
   const topics = searchParams.get('topics')?.split(',') || [];
   const profileImageUrl = searchParams.get('profileImageUrl');
 
+  // Log the incoming topics and profileImageUrl
+  console.log('Received topics:', topics);
+  console.log('Received profileImageUrl:', profileImageUrl);
+
   // Check if the profileImageUrl is undefined or invalid
   const imageUrl = profileImageUrl && profileImageUrl.startsWith('http')
     ? profileImageUrl
     : 'https://example.com/default-avatar.png'; // Replace with your own default image URL
 
   if (topics.length === 0) {
+    console.warn('No topics provided in request.');
     return new Response('No topics provided', { status: 400 });
   }
 
   try {
+    // Additional logging before generating the image
+    console.log('Generating image with the following data:');
+    console.log('Image URL:', imageUrl);
+    console.log('Topics:', topics);
+
     return new ImageResponse(
       (
         <div
