@@ -2,6 +2,7 @@ import axios from 'axios';
 import natural from 'natural';
 import lda from 'lda'; // Import the LDA library
 
+const tokenizer = new natural.WordTokenizer();
 const FARQUEST_API = 'https://build.far.quest/farcaster/v2';
 
 async function getTrendingCasts(limit = 20) {
@@ -28,9 +29,17 @@ async function getTrendingCasts(limit = 20) {
   }
 }
 
+function cleanText(text) {
+  // Remove any non-alphanumeric characters except spaces
+  return text.replace(/[^a-zA-Z\s]/g, '').toLowerCase();
+}
+
 function performTopicModeling(texts, numberOfTopics = 5, termsPerTopic = 3) {
-  // Perform LDA topic modeling on the raw text documents
-  const topics = lda(texts, numberOfTopics, termsPerTopic);
+  // Clean and prepare the texts for LDA
+  const cleanedTexts = texts.map(text => cleanText(text));
+
+  // Perform LDA topic modeling on the cleaned text documents
+  const topics = lda(cleanedTexts, numberOfTopics, termsPerTopic);
 
   // Extract the most significant terms for each topic
   return topics.map((topic, index) => ({
@@ -47,7 +56,7 @@ export default async function handler(req, res) {
       const casts = await getTrendingCasts();
       console.log('Fetched casts:', JSON.stringify(casts, null, 2));
 
-      // Extract text from trending casts
+      // Extract and clean text from trending casts
       const castTexts = casts.map(cast => cast.text);
       console.log('Combined cast texts:', castTexts);
 

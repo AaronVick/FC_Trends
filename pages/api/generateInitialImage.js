@@ -19,14 +19,14 @@ export default async function handler(req) {
             justifyContent: 'center',
             alignItems: 'center',
             padding: '20px',
-            backgroundColor: '#f9f9f9',
+            backgroundColor: '#3b0a45', // Dark purple background
             fontFamily: 'Arial, sans-serif',
           }}
         >
-          <div style={{ fontSize: '50px', fontWeight: 'bold', color: '#333' }}>
+          <div style={{ fontSize: '50px', fontWeight: 'bold', color: '#ffffff' }}>
             Trending Topics on Farcaster
           </div>
-          <div style={{ fontSize: '30px', marginTop: '20px', color: '#777', textAlign: 'center' }}>
+          <div style={{ fontSize: '30px', marginTop: '20px', color: '#ffffff', textAlign: 'center' }}>
             Stay updated with the latest discussions.
           </div>
         </div>
