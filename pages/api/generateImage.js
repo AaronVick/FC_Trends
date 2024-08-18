@@ -9,17 +9,17 @@ export default async function handler(req) {
   const topics = searchParams.get('topics')?.split(',') || [];
   const profileImageUrl = searchParams.get('profileImageUrl');
 
-  // Log the incoming topics and profileImageUrl
+  // Logging the incoming topics and profileImageUrl
   console.log('Received topics:', topics);
   console.log('Received profileImageUrl:', profileImageUrl);
 
   // Check if the profileImageUrl is undefined or invalid
   const imageUrl = profileImageUrl && profileImageUrl.startsWith('http')
     ? profileImageUrl
-    : 'https://example.com/default-avatar.png'; // Replace with your own default image URL
+    : 'https://example.com/default-avatar.png'; // Replace with your default image URL
 
   if (topics.length === 0) {
-    console.warn('No topics provided in request.');
+    console.warn('No topics provided in the request.');
     return new Response('No topics provided', { status: 400 });
   }
 
@@ -45,10 +45,10 @@ export default async function handler(req) {
           <img
             src={imageUrl}
             alt="Profile"
+            width="200" // Setting explicit width
+            height="200" // Setting explicit height (square for avatar)
             style={{
               borderRadius: '50%',
-              width: '200px',  // Adjusting width for the 1.91:1 aspect ratio
-              height: '105px', // Adjusting height for the 1.91:1 aspect ratio
               marginBottom: 20,
             }}
           />
@@ -66,8 +66,8 @@ export default async function handler(req) {
         </div>
       ),
       {
-        width: 800,  // 1.91:1 aspect ratio width
-        height: 418, // 1.91:1 aspect ratio height
+        width: 1200,  // Updated width to standard 1.91:1 aspect ratio
+        height: 628,  // Updated height to standard 1.91:1 aspect ratio
       }
     );
   } catch (error) {
