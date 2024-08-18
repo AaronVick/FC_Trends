@@ -1,44 +1,9 @@
 import axios from 'axios';
 import natural from 'natural';
+import lda from 'lda'; // Import the LDA library
 
-const TfIdf = natural.TfIdf;
 const tokenizer = new natural.WordTokenizer();
-
 const FARQUEST_API = 'https://build.far.quest/farcaster/v2';
-
-function extractKeyPhrases(text, n = 5) {
-  const tfidf = new TfIdf();
-  
-  // Tokenize and add the document
-  const tokens = tokenizer.tokenize(text.toLowerCase());
-  tfidf.addDocument(tokens);
-
-  // Calculate scores for each term
-  const scores = {};
-  tfidf.listTerms(0 /*document index*/).forEach(item => {
-    scores[item.term] = item.tfidf;
-  });
-
-  // Extract key phrases (bigrams and trigrams)
-  const phrases = [];
-  for (let i = 0; i < tokens.length - 1; i++) {
-    const bigram = tokens.slice(i, i + 2).join(' ');
-    const trigram = tokens.slice(i, i + 3).join(' ');
-    phrases.push(bigram, trigram);
-  }
-
-  // Score phrases
-  const phraseScores = phrases.map(phrase => ({
-    phrase,
-    score: phrase.split(' ').reduce((sum, term) => sum + (scores[term] || 0), 0)
-  }));
-
-  // Sort and return top n phrases
-  return phraseScores
-    .sort((a, b) => b.score - a.score)
-    .slice(0, n)
-    .map(item => item.phrase);
-}
 
 async function getTrendingCasts(limit = 20) {
   try {
@@ -64,6 +29,20 @@ async function getTrendingCasts(limit = 20) {
   }
 }
 
+function performTopicModeling(texts, numberOfTopics = 5, termsPerTopic = 3) {
+  // Tokenize the texts into sentences
+  const documents = texts.map(text => tokenizer.tokenize(text.toLowerCase()));
+
+  // Perform LDA topic modeling
+  const topics = lda(documents, numberOfTopics, termsPerTopic);
+
+  // Extract the most significant terms for each topic
+  return topics.map((topic, index) => ({
+    topic: `Topic ${index + 1}`,
+    terms: topic.map(term => term.term).join(', ')
+  }));
+}
+
 export default async function handler(req, res) {
   if (req.method === 'GET') {
     try {
@@ -73,11 +52,11 @@ export default async function handler(req, res) {
       console.log('Fetched casts:', JSON.stringify(casts, null, 2));
 
       // Extract text from trending casts
-      const castTexts = casts.map(cast => cast.text).join(' ');
+      const castTexts = casts.map(cast => cast.text);
       console.log('Combined cast texts:', castTexts);
 
-      const topics = extractKeyPhrases(castTexts);
-      console.log('Extracted key phrases:', topics);
+      const topics = performTopicModeling(castTexts, 5, 3);
+      console.log('Extracted topics:', topics);
 
       res.status(200).json({ topics });
     } catch (error) {
