@@ -2,7 +2,6 @@ import axios from 'axios';
 import natural from 'natural';
 import lda from 'lda'; // Import the LDA library
 
-const tokenizer = new natural.WordTokenizer();
 const FARQUEST_API = 'https://build.far.quest/farcaster/v2';
 
 async function getTrendingCasts(limit = 20) {
@@ -30,11 +29,8 @@ async function getTrendingCasts(limit = 20) {
 }
 
 function performTopicModeling(texts, numberOfTopics = 5, termsPerTopic = 3) {
-  // Tokenize the texts into sentences
-  const documents = texts.map(text => tokenizer.tokenize(text.toLowerCase()));
-
-  // Perform LDA topic modeling
-  const topics = lda(documents, numberOfTopics, termsPerTopic);
+  // Perform LDA topic modeling on the raw text documents
+  const topics = lda(texts, numberOfTopics, termsPerTopic);
 
   // Extract the most significant terms for each topic
   return topics.map((topic, index) => ({
