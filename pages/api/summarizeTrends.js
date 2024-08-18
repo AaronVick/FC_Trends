@@ -44,7 +44,7 @@ async function getTrendingCasts(limit = 20) {
   try {
     const response = await axios.get(`${FARQUEST_API}/feed`, {
       headers: {
-        'API-KEY': process.env.FARQUEST_API_KEY,  // Use your actual API key stored in Vercel
+        'API-KEY': process.env.FARQUEST_API_KEY,
         'accept': 'application/json',
       },
       params: {
