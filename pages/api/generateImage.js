@@ -33,7 +33,7 @@ export default async function handler(req) {
       (
         <div
           style={{
-            display: 'flex',
+            display: 'flex', // Ensuring display: flex for the parent container
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
@@ -54,6 +54,9 @@ export default async function handler(req) {
           />
           <div
             style={{
+              display: 'flex', // Ensuring display: flex for this container as well
+              flexDirection: 'column',
+              alignItems: 'center',
               fontSize: 40,
               color: '#333',
               textAlign: 'center',
