@@ -47,8 +47,8 @@ export default async function handler(req) {
             alt="Profile"
             style={{
               borderRadius: '50%',
-              width: 100,
-              height: 100,
+              width: '100px',  // Explicitly define width
+              height: '100px', // Explicitly define height
               marginBottom: 20,
             }}
           />
